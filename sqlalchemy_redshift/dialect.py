@@ -2,6 +2,7 @@ import re
 from collections import defaultdict, namedtuple
 
 import pkg_resources
+import os
 import sqlalchemy as sa
 from sqlalchemy import Column, exc, inspect
 from sqlalchemy.dialects.postgresql.base import PGCompiler, PGDDLCompiler
@@ -609,7 +610,11 @@ class RedshiftDialect(PGDialect_psycopg2):
 
     @reflection.cache
     def _get_all_relation_info(self, connection, **kw):
-        schema = os.environ.get('DB_USER', 'public')
+        schema = inspect(connection).default_schema_name
+        db_user = os.environ.get('DB_USER', 'postgres')
+        if db_user != 'postgres':
+          schema = db_user
+        
         result = connection.execute("""
         SELECT
           c.relkind,

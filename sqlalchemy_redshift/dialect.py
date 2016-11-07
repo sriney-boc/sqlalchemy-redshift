@@ -628,7 +628,7 @@ class RedshiftDialect(PGDialect_psycopg2):
              LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
              JOIN pg_catalog.pg_user u ON u.usesysid = c.relowner
         WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f')
-          AND n.nspname !~ '^pg_'
+          AND n.nspname = 'redshifttest503bo' 
         ORDER BY c.relkind, n.oid, n.nspname;
         """)
         relations = {}

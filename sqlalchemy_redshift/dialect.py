@@ -609,6 +609,7 @@ class RedshiftDialect(PGDialect_psycopg2):
 
     @reflection.cache
     def _get_all_relation_info(self, connection, **kw):
+        schema = os.environ.get('DB_USER', 'public')
         result = connection.execute("""
         SELECT
           c.relkind,
@@ -628,7 +629,7 @@ class RedshiftDialect(PGDialect_psycopg2):
              LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
              JOIN pg_catalog.pg_user u ON u.usesysid = c.relowner
         WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f')
-          AND n.nspname = 're3bo' 
+          AND n.nspname = 'redshifttest503bo' 
         ORDER BY c.relkind, n.oid, n.nspname;
         """)
         relations = {}

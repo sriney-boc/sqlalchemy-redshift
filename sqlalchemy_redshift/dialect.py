@@ -629,9 +629,9 @@ class RedshiftDialect(PGDialect_psycopg2):
              LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
              JOIN pg_catalog.pg_user u ON u.usesysid = c.relowner
         WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f')
-          AND n.nspname = 'redshifttest503bo' 
+          AND n.nspname = '%s' 
         ORDER BY c.relkind, n.oid, n.nspname;
-        """)
+        """.format(schema))
         relations = {}
         for rel in result:
             key = RelationKey(rel.relname, rel.schema, connection)

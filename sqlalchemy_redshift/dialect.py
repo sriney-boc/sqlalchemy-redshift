@@ -635,7 +635,6 @@ class RedshiftDialect(PGDialect_psycopg2):
           AND n.nspname = '{0}' 
         ORDER BY c.relkind, n.oid, n.nspname;
         """.format(schema)
-        raise Exception(query)
         result = connection.execute(query)
         relations = {}
         for rel in result:

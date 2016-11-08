@@ -613,9 +613,8 @@ class RedshiftDialect(PGDialect_psycopg2):
         schema = inspect(connection).default_schema_name
         db_user = os.environ.get('DB_USER', 'postgres')
         if db_user != 'postgres':
-          schema = db_user
-        
-        result = connection.execute("""
+          schema = db_user 
+        query = """
         SELECT
           c.relkind,
           n.oid as "schema_oid",
@@ -636,7 +635,9 @@ class RedshiftDialect(PGDialect_psycopg2):
         WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f')
           AND n.nspname = '%s' 
         ORDER BY c.relkind, n.oid, n.nspname;
-        """.format(schema))
+        """.format(schema)
+        print("Running this query: " + query)
+        result = connection.execute(query)
         relations = {}
         for rel in result:
             key = RelationKey(rel.relname, rel.schema, connection)

@@ -612,7 +612,7 @@ class RedshiftDialect(PGDialect_psycopg2):
     def _get_all_relation_info(self, connection, **kw):
         schema = inspect(connection).default_schema_name
         db_user = os.environ.get('DB_USER', 'postgres')
-        schema = (db_user != 'postgres' ? db_user : 'public')
+        schema = 'public' if db_user == 'postgres' else db_user
         query = """
         SELECT
           c.relkind,
